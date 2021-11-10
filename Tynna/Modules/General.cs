@@ -45,9 +45,9 @@ namespace Tynna.Modules
         [Command("info")]
         public async Task Info(SocketGuildUser user = null)
         {
-            Console.WriteLine($"\nEl usuario {Context.User.Username} ha usado el comando -INFO-");
-
             user ??= (SocketGuildUser)Context.User;
+
+            Console.WriteLine($"\nEl usuario {user.Username} ha usado el comando -INFO-");
 
             System.String userAvatarUrl = user.GetAvatarUrl() ?? user.GetDefaultAvatarUrl();
             System.UInt64 userId = user.Id;
@@ -64,7 +64,7 @@ namespace Tynna.Modules
 
             var builder = new EmbedBuilder()
                 .WithThumbnailUrl(userAvatarUrl)
-                .WithDescription("Información acerca de ti:")
+                .WithDescription($"Información acerca de {user.Username}:")
                 .WithColor(new Color(108, 52, 131))
                 .AddField("ID del usuario", userId, true)
                 .AddField("Discriminador", userDiscriminator, true)
@@ -76,20 +76,6 @@ namespace Tynna.Modules
             var embed = builder.Build();
 
             await Context.Channel.SendMessageAsync(null, false, embed);
-        }
-
-        [Command("purge")]
-        [RequireUserPermission(GuildPermission.ManageMessages)]
-        public async Task Purge(int amount)
-        {
-            Console.WriteLine($"\nEl usuario {Context.User.Username} ha usado el comando -PURGE-");
-
-            var messages = await Context.Channel.GetMessagesAsync(amount + 1).FlattenAsync();
-            await (Context.Channel as SocketTextChannel).DeleteMessagesAsync(messages);
-
-            var message = await Context.Channel.SendMessageAsync($"{messages.Count()} mensajes eliminados correctamente!");
-            await Task.Delay(2000);
-            await message.DeleteAsync();
         }
 
         [Command("server")]
