@@ -1,4 +1,5 @@
-﻿using Discord.Commands;
+﻿using Discord;
+using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -25,6 +26,10 @@ namespace Tynna.Services
 
             _discord.Ready += OnReady;
             _discord.MessageReceived += OnMessageReceived;
+            _discord.ChannelCreated += OnChannelCreated;
+            _discord.JoinedGuild += OnJoinedGuild;
+            _discord.ReactionAdded += OnReactionAdded;
+            _discord.ReactionRemoved += OnReactionRemoved;
         }
 
         private Task OnReady()
@@ -53,6 +58,37 @@ namespace Tynna.Services
                     Console.WriteLine($"\nHa ocurrido el siguiente error: \n{reason}");
                 }
             }
+        }
+
+        private async Task OnChannelCreated(SocketChannel arg)
+        {
+            if ((arg as ITextChannel) == null) return;
+            var channel = arg as ITextChannel;
+
+            await channel.SendMessageAsync("Para que creaste este canal? ");
+        }
+
+        private async Task OnJoinedGuild(SocketGuild arg)
+        {
+            await arg.DefaultChannel.SendMessageAsync("Gracias por agregarme a tu discord!");
+        }
+
+        private async Task OnReactionAdded(Cacheable<IUserMessage, ulong> arg1, ISocketMessageChannel arg2, SocketReaction arg3)
+        {
+            if (arg3.MessageId != 908086087619076096) return;
+            if (arg3.Emote.Name != "👀") return;
+
+            var role = (arg2 as SocketGuildChannel).Guild.Roles.FirstOrDefault(x => x.Id == 908082914053460029);
+            await (arg3.User.Value as SocketGuildUser).AddRoleAsync(role);
+        }
+
+        private async Task OnReactionRemoved(Cacheable<IUserMessage, ulong> arg1, ISocketMessageChannel arg2, SocketReaction arg3)
+        {
+            if (arg3.MessageId != 908086087619076096) return;
+            if (arg3.Emote.Name != "👀") return;
+
+            var role = (arg2 as SocketGuildChannel).Guild.Roles.FirstOrDefault(x => x.Id == 908082914053460029);
+            await (arg3.User.Value as SocketGuildUser).RemoveRoleAsync(role);
         }
     }
 }
