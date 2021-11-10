@@ -16,18 +16,22 @@ namespace Tynna.Modules
         {
             Console.WriteLine($"\nEl usuario {Context.User.Username} ha usado el comando -HELP-");
 
+            System.String commandHelp = "Te tiro los comandos";
             System.String commandPing = "No hago nada, soy el primer comando. Totalmente al pedo, borrenme porfa!";
             System.String commandInfo = "Te doy una info tuya o de alguien (si lo mencionas) uwu";
             System.String commandPurge = "Te borro los últimos X mensages -.-";
-            System.String commandServer = "Te una info pero del server owo";
+            System.String commandServer = "Te tiro info pero del server owo";
+            System.String commandMeme = "Te tiro un momardo";
 
             var builder = new EmbedBuilder()
                 .WithDescription("Comandos:")
                 .WithColor(new Color(247, 220, 111))
+                .AddField("!help", commandHelp, false)
                 .AddField("!ping", commandPing, false)
                 .AddField("!info", commandInfo, false)
-                .AddField("!purge", commandPurge, false)
                 .AddField("!server", commandServer, false)
+                .AddField("!purge", commandPurge, false)
+                .AddField("!meme", commandMeme, false)
                 .WithCurrentTimestamp();
             var embed = builder.Build();
 
