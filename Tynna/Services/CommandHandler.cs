@@ -49,8 +49,8 @@ namespace Tynna.Services
                 {
                     var reason = result.Error;
 
-                    await context.Channel.SendMessageAsync($"The following error occured: \n{reason}");
-                    Console.WriteLine($"The following error occured: \n{reason}");
+                    await context.Channel.SendMessageAsync($"Ha ocurrido el siguiente error: \n{reason}");
+                    Console.WriteLine($"Ha ocurrido el siguiente error: \n{reason}");
                 }
             }
         }
