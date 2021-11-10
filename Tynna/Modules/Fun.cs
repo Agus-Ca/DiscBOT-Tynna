@@ -14,18 +14,10 @@ namespace Tynna.Modules
     public class Fun : ModuleBase
     {
         [Command("meme")]
-        [Alias("reddit")]
-        public async Task Meme(string subreddit = null)
+        public async Task Meme()
         {
-            var search = subreddit ?? "memes";
-
             var client = new HttpClient();
-            var result = await client.GetStringAsync($"https://reddit.com/r/{search}/random.json?limit=1");
-            if (!result.StartsWith("["))
-            {
-                await Context.Channel.SendMessageAsync("Este subreddit no existe!");
-                return;
-            }
+            var result = await client.GetStringAsync($"https://reddit.com/r/meme/random.json?limit=1");
             JArray arr = JArray.Parse(result);
             JObject post = JObject.Parse(arr[0]["data"]["children"][0]["data"].ToString());
 
